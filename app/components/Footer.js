@@ -26,12 +26,37 @@ class Footer extends React.Component{
     render(){
         let leaderboardCharacters = this.state.characters.map((character)=>{
             return(
-                    <li key={}>:
-                        <Link to=>
-                            <img className=‘’ src={'http://image.eveonline.com/Char'}
+                    <li key={character.characterId}>:
+                        <Link to={'/characters/'+character.characterId}>
+                            <img className='thumb-md' src={'http://image.eveonline.com/Char'}
                         </Link>
                     </li>
                   );
         });
     }
+
+    return(
+           <footer> 
+            <div className='container'>
+                <div className='row'>
+                    <div className='col-sm-5'>
+                        <h3 className='lead'><strong>Information</strong></h3>
+                        <p>Powered by <strong>Node.js</strong>,<strong>MongoDB</strong></p>
+                        <p>you may view the <a href='https://github.com'>
+                        <p>@2015</p>
+                    </div>
+                </div>
+                <div className='col-sm-7 hidden-xs'>
+                    <div className='lead'>
+                    <strong>Leaderboard</strong>
+                    <ul className='list-inline'>
+                        {leaderboardCharacters}
+                    </ul>
+                    </div>
+                </div>
+            </div>
+           </footer>
+          );
 }
+
+export default Footer;
