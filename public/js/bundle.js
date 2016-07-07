@@ -88,7 +88,7 @@ var _componentsHome2 = _interopRequireDefault(_componentsHome);
 exports['default'] = _react2['default'].createElement(
     _reactRouter.Route,
     { handler: _componentsApp2['default'] },
-    _react2['default'].createElement(_reactRouter.Route, { pahler: _componentsHome2['default'] })
+    _react2['default'].createElement(_reactRouter.Route, { path: '/', handler: _componentsHome2['default'] })
 );
 module.exports = exports['default'];
 
