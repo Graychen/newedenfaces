@@ -5,6 +5,6 @@ import Home from './components/Home';
 
 export default(
         <Route handler = {App}>
-            <Route pahler={Home} />
+            <Route path='/' handler={Home} />
         </Route>
         );
