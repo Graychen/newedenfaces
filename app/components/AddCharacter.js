@@ -48,7 +48,22 @@ class AddCharacter extends React.Component{
                         <div className='panel panel-default'>
                          <div className='panel-body'>
                          <form onSubmit={this.handleSubmit.bind(this)}>
-                            <div className=''>
+                            <div className='form-group'>Character Name</label>
+                                <label className='control-label'></label>
+                                <input type='text' className='form-control' ref='nameTextField' value={this.state.name}
+                                       onChange={AddCharacterAction.updateName} autoFocus />
+                                <span className='help-block'>{this.state.helpBlock}</span>    
+                            </div>
+                            <div className='form-group' + this.state.genderValidationState>
+                                <div className='redio radio-inline'>
+                                    <input type='radio' name='gender' id='male' value='Male'
+                                           checked={this.state.gender==='Male'}  
+                                           onChange={AddCharacterActions.updateGender}/>
+                                    <label htmlFor='male'>Male</span>    
+                                </div>
+                            </div>
+                            <button type='submit' className='btn btn-primary'></button>
+
                          </form>
                         </div>
                     </div>
@@ -57,3 +72,4 @@ class AddCharacter extends React.Component{
     }
 }
 
+export default AddCharacter;
