@@ -9,11 +9,17 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io     = require('socket')(server);
 var onlineUsers = 0;
-
+var mongoose = require('mongoose');
+var Character = require('./models/character');
+var config = require('./config');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
+mongoose.connect(config.database);
+mongoose.connect.on('error',function(){
+    console.info('Error:Count not connect to MongoDB');
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false  }));
 app.use(express.static(path.join(__dirname, 'public')));
