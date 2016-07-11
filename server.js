@@ -1,3 +1,4 @@
+var _           = require('underscore');
 var swig        = require('swig');
 var React       = require('react');
 var Router      = require('react-router');
@@ -108,7 +109,40 @@ app.get('/api/characters',function(req,res,next){
     var choices = ['Female','Male'];
     var randomGender = _.sample(choices);
 
-    Character.find({random:{$near:[]}});
+    Character.find({random:{$near:[Math.random(),0]}})
+        .where('voted',false)
+        .where('gender',randomGender)
+        .limit(2)
+        .exed(function(err,characters)){
+            if(err) return next(err);
+            if(Characters.length===2){
+                return res.send(characters);
+            }
+        }
+
+    var cppositeGender = _.first(_.without(choices,rendomGender));
+
+    Character
+        .find(random.{$near:[Math.random(),0]})
+        .where('voted',false)
+        .where('gender',oppsiteGender)
+        .limit(2)
+        .exec(function(err,characters)){
+            if (err) return next(err);
+            if (characters.length ===2){
+                return res.send(characters);
+            }
+            Character.update({},{$set:{voted:false}},{multi:true},function(err){
+                if(err) return next(err);
+                res.send([]);
+            });
+
+        }
+});
+
+app.put('/api/characters',function(req,res,next){
+    var winner = req.body.winner;
+    var loser  = req.body.loser;
 });
 app.listen(app.get('port'), function() {
       console.log('Express server listening on port ' + app.get('port'));
