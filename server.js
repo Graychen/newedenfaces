@@ -140,10 +140,39 @@ app.get('/api/characters',function(req,res,next){
         }
 });
 
+app.get('/api/characters/count',function(req,res,next){
+    Character.count({},function(err,count){
+        if(err) return next(err);
+        res.send({count:count});
+    });
+});
+app.get('/api/characters/search',function(req,res,next){
+    var characterName = new RegExp(req.query.name,'i');
+
+    Character.findOne({name:characterName},function(err,character){
+        if(err) return next(err);
+
+        if(!Character){
+            return res.status(404).send({message:'Character not found'});
+        }
+
+        res.send(character);
+    });
+});
+app.get('/api/characters/top',function(req,res,next){
+    var params = reql.query;
+    var conditions = {};
+
+    _.each(params,function(value,key){
+        conditions[key] = new RegExp('^'+value + '$','i');
+    });
+
+});
 app.put('/api/characters',function(req,res,next){
     var winner = req.body.winner;
     var loser  = req.body.loser;
 });
+
 app.listen(app.get('port'), function() {
       console.log('Express server listening on port ' + app.get('port'));
 });
