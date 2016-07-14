@@ -170,7 +170,66 @@ app.get('/api/characters/top',function(req,res,next){
     _.each(params,function(value,key){
         conditions[key] = new RegExp('^'+value + '$','i');
     });
+    Character
+        .find(conditions)
+        .sort('-wins')
+        .limit(100)
+        .exec(function(err,characters){
+            if(err) return next(err);
+            Characters.sort(function(a,b){
+                if(a.wins/(a.wins+a.losses)<b.wins/(b.wins+b.losses))
+                return 0;
+            });
+            res.send(characters);
+        });
+        
 
+});
+app.get('/api/characters/shame',function(req,res,next){
+    Characters
+        .find()
+        .sort('-losses')
+        .limit(100)
+        .exec(function(err,characters){
+            if(err) return next(err);
+            res.send(characters);
+        });
+});
+app.post('/api/report',function(req,res,next){
+    var characterId = req.body.characterId;
+
+    Character.findOne({characterId:characterId},function(err,character){
+        if(err) return next(err);
+        if(!character){
+            return res.status(404).send({message:'Character not found'});
+        }
+        character.reports++;
+        if(character.remove()){
+            character.remove();
+            return res.send({message:character.name+'has been deleted'});
+        }
+
+        character.save(function(err){
+            if(err) return next(err);
+            res.send(message: character.name+'has been repoted');
+        });
+
+    });
+    
+});
+app.get('/api/status',function(req,res,next){
+    async.parallel([
+            function（callback）{
+                Character.count({},function(err,count){
+                    callback(err,count);
+                });
+            }
+            function(callback){
+                Character.count({race:'Amarr'},function(){
+
+                });
+            }
+    ]);
 });
 app.put('/api/characters',function(req,res,next){
     var winner = req.body.winner;
