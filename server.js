@@ -257,8 +257,39 @@ app.post('/api/report',function(req,res,next){
 app.get('/api/stats',function(req,res,next){
     async.parallel([
         function(callback){
-
+            Character.count({},function(err,count){
+                callback(err,count);
+            });
+        },
+        function(callback){
+            Character.count({race:'Amarr'},function(err,amarrCount){
+                callback(err,count);
+            });
+        },
+        function(callback){
+            Character.count({race:'Caldari'},function(err,caldariCount){
+                callback(err,caldariCount);
+            });
+        },
+        function(callback){
+            Character.aggregate({$group:{_id:null,total:{$sum:'$wins'}}},function(err,totalVotes){
+                var total = totalVotes.length?totalVotes[0].total:0;
+                callback(err,total);
+            });
+        },
+        function(callback){
+            Character.find()
+                .sort('-wins')
+                .limit(100)
+                .select('race')
+                .exec(function(){
+                    if(err) return next(err);
+                    var raceCount = _.countBy(characters,function(charactera){return character.race;});
+                    var max       = _.max(raceCount,function(race){return race});
+                    var inverted  = _.inverted(raceCount);
+                });
         }
+
         ]);
 });
 app.listen(app.get('port'), function() {
